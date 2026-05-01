@@ -29,6 +29,8 @@ The control loop runs at a configured interval between 20 ms and 50 ms.
 
 The loop must tolerate missed probe samples. Missing one tick is not a panic condition.
 
+The offline runtime uses the same control loop shape with a scripted probe source and an in-memory shaper. This lets the governor, EWMA filters, fallback behavior, and metrics be exercised before router hardware arrives.
+
 ## Probe Flow
 
 Probe workers send ICMP and UDP probes to multiple reflectors. Each sample includes:
@@ -77,6 +79,23 @@ The daemon emits:
 
 Metrics and TUI data must be read-only in the first build. Control actions should stay in the daemon config and service lifecycle.
 
+The first metrics server exposes `/metrics` from the in-memory runtime snapshot. It is safe to run from the simulator because it does not touch router interfaces.
+
+## Offline Simulation Flow
+
+1. Load `config/example.json`.
+2. Create an in-memory shaper at the configured ceiling rate.
+3. Create a scripted probe source with baseline latency, buffer latency, and periodic spikes.
+4. Run the control loop for the requested tick count.
+5. Print status snapshots every ten ticks.
+6. Optionally serve `/metrics` while the simulation runs.
+
+Planned command:
+
+```bash
+go run ./cmd/aurasim --config config/example.json --ticks 120 --serve-metrics
+```
+
 ## Deployment Flow
 
 1. Cross-compile from WSL2 or Linux.
@@ -85,6 +104,8 @@ Metrics and TUI data must be read-only in the first build. Control actions shoul
 4. Install the `procd` init script.
 5. Enable and start the service.
 6. Confirm metrics and qdisc state.
+
+The initial OpenWrt init skeleton lives at `packaging/openwrt/aura-sqm.init`.
 
 Planned commands:
 
@@ -104,4 +125,4 @@ aura-sqm --config /etc/aura-sqm/config.json --validate-config
 
 ## Next Validation Action
 
-Capture real router interface names and current qdisc output before the shaper module is coded.
+Run the simulator locally after the Go toolchain is installed, then capture real router interface names and current qdisc output when the hardware arrives.

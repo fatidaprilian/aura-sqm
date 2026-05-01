@@ -10,6 +10,10 @@ type Snapshot struct {
 	ProbeHealthy       bool
 	FallbackActive     bool
 	PriorityActive     bool
+	ControlError       float64
+	ControlIntegral    float64
+	ControlDerivative  float64
+	TickTotal          uint64
 }
 
 func RenderText(s Snapshot) string {
@@ -20,7 +24,11 @@ func RenderText(s Snapshot) string {
 			"slow_latency_seconds=%.6f\n"+
 			"probe_healthy=%t\n"+
 			"fallback_active=%t\n"+
-			"priority_active=%t\n",
+			"priority_active=%t\n"+
+			"control_error=%.6f\n"+
+			"control_integral=%.6f\n"+
+			"control_derivative=%.6f\n"+
+			"tick_total=%d\n",
 		s.UploadRateBPS,
 		s.DownloadRateBPS,
 		s.FastLatencySeconds,
@@ -28,6 +36,10 @@ func RenderText(s Snapshot) string {
 		s.ProbeHealthy,
 		s.FallbackActive,
 		s.PriorityActive,
+		s.ControlError,
+		s.ControlIntegral,
+		s.ControlDerivative,
+		s.TickTotal,
 	)
 }
 
@@ -58,7 +70,11 @@ func RenderPrometheus(s Snapshot) string {
 			"# TYPE aura_panic_fallback_active gauge\n"+
 			"aura_panic_fallback_active %d\n"+
 			"# TYPE aura_priority_rule_active gauge\n"+
-			"aura_priority_rule_active %d\n",
+			"aura_priority_rule_active %d\n"+
+			"# TYPE aura_control_loop_tick_total counter\n"+
+			"aura_control_loop_tick_total %d\n"+
+			"# TYPE aura_control_error_seconds gauge\n"+
+			"aura_control_error_seconds %.6f\n",
 		s.UploadRateBPS,
 		s.DownloadRateBPS,
 		s.FastLatencySeconds,
@@ -66,5 +82,7 @@ func RenderPrometheus(s Snapshot) string {
 		probeHealth,
 		fallback,
 		priority,
+		s.TickTotal,
+		s.ControlError,
 	)
 }

@@ -30,6 +30,7 @@ The first target is a JCG Q20 router with a MediaTek MT7621 processor, 128 MB RA
 - Aura-SQM will not depend on a database server.
 - Aura-SQM will not require Docker on the router.
 - Aura-SQM will not flush live queues during normal rate updates.
+- Aura-SQM will not perform real CAKE updates until hardware validation confirms the interface and qdisc behavior.
 
 ## Primary Features
 
@@ -56,6 +57,10 @@ If all reflectors become unreachable, Aura-SQM must stop tightening bandwidth li
 ### Observability
 
 Aura-SQM must expose a Prometheus-compatible `/metrics` endpoint and a terminal user interface for low-overhead monitoring over Secure Shell (SSH).
+
+### Offline Simulator
+
+Aura-SQM includes a simulator path that runs the governor against scripted latency and an in-memory shaper. This allows development to continue before the router arrives.
 
 ## Constraints
 
@@ -87,4 +92,4 @@ Aura-SQM must expose a Prometheus-compatible `/metrics` endpoint and a terminal 
 
 ## Next Validation Action
 
-Before writing daemon code, confirm the router output for `uname -a`, `opkg list-installed | grep cake`, WAN interface names, CPU model, and available flash space.
+Install the Go toolchain locally, run the offline simulator and tests, then confirm the router output for `uname -a`, `opkg list-installed | grep cake`, WAN interface names, CPU model, and available flash space when the hardware arrives.

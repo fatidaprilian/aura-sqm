@@ -8,14 +8,15 @@
   },
   "project": {
     "name": "aura-sqm",
-    "currentFocus": "Initial Go daemon scaffold for an OpenWrt adaptive CAKE Smart Queue Management engine.",
+    "currentFocus": "Offline runtime, simulator, and hardware-readiness path for an OpenWrt adaptive CAKE Smart Queue Management engine.",
     "durableFacts": [
       "Repository is initialized on branch main with origin https://github.com/fatidaprilian/aura-sqm.git.",
       "Local Git commit identity is configured as user.name=fatidaprilian and user.email=fatidaprilian@users.noreply.github.com.",
       "Aura-SQM target runtime is linux/mipsle on OpenWrt with kmod-sched-cake and procd.",
       "First implementation should be a single Go daemon with internal modules for config, probe, filter, control, shaper, priority, observe, and tui.",
       "The first config format is JSON at /etc/aura-sqm/config.json, with UCI left as a later OpenWrt adapter option.",
-      "Initial code scaffold exists for cmd/aurad, internal/config, internal/filter, internal/control, and internal/observe."
+      "Initial code scaffold exists for cmd/aurad, cmd/aurasim, internal/config, internal/filter, internal/control, internal/observe, internal/probe, internal/runtime, and internal/shaper.",
+      "Real netlink CAKE writes remain blocked until router hardware validation is complete."
     ]
   },
   "progress": {
@@ -23,23 +24,26 @@
       "Created README.md and project docs for brief, ADR, flow, API/public contracts, data/config model, and TUI design.",
       "Replaced scaffold design intent with a terminal UI design contract based on a latency oscilloscope anchor.",
       "Added .gitignore for Go/OpenWrt build outputs, secrets, logs, and local agent artifacts.",
-      "Added dependency-free Go scaffold with config validation, EWMA filtering, PID control, text/Prometheus rendering, tests, and config/example.json."
+      "Added dependency-free Go scaffold with config validation, EWMA filtering, PID control, text/Prometheus rendering, tests, and config/example.json.",
+      "Added offline runtime engine, scripted probe source, in-memory shaper, /metrics server, aurasim command, aurad --simulate mode, OpenWrt procd init skeleton, and router snapshot checklist."
     ],
     "pendingIssues": [
-      "Router hardware facts still need validation: kernel, installed CAKE module, WAN interface names, CPU/FPU behavior, and flash space.",
+      "Router hardware facts still need validation: kernel, installed CAKE module, WAN interface names, CPU/FPU behavior, qdisc behavior, and flash space.",
       "GitHub push still depends on available credentials or Source Control authentication.",
       "Go toolchain is not installed in the current environment, so gofmt and go test could not run here."
     ],
     "nextBestActions": [
       "Validate router environment with uname, opkg, interface, qdisc, CPU, and storage commands.",
       "Install Go locally or run validation in an environment with Go, then run gofmt and go test ./...",
+      "Run aurad --simulate or aurasim once Go is installed.",
       "Create a small hardware probe before wiring netlink CAKE updates into the full control loop."
     ],
     "validationState": [
       "docs/design-intent.json parsed successfully with Node.",
       "config/example.json parsed successfully with Node.",
       "No package.json exists, so npm run validate is not available yet.",
-      "gofmt and go test are blocked because go is not installed in this environment."
+      "gofmt and go test are blocked because go is not installed in this environment.",
+      "OpenWrt service and router snapshot scripts were reviewed but not run against hardware."
     ]
   },
   "designContinuity": {
@@ -57,5 +61,5 @@
     "redactSensitiveTextBeforeWriting": true
   },
   "generatedAt": "2026-05-01T01:17:52.105Z",
-  "lastUpdatedAt": "2026-05-01T09:05:00+07:00"
+  "lastUpdatedAt": "2026-05-01T09:18:00+07:00"
 }

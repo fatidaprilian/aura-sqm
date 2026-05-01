@@ -43,6 +43,7 @@ The endpoint must not expose secrets, MAC addresses, private IP addresses, or ra
 | `aura_priority_rule_active` | gauge | none | `1` when Farid-Mode priority rule is active, else `0`. |
 | `aura_control_loop_tick_total` | counter | none | Number of completed control ticks. |
 | `aura_control_loop_overrun_total` | counter | none | Number of ticks that exceeded the interval budget. |
+| `aura_control_error_seconds` | gauge | none | Current PID control error in seconds. |
 
 Metric labels must stay low-cardinality. Do not label metrics with raw IP addresses, MAC addresses, or per-flow IDs.
 
@@ -95,9 +96,20 @@ Planned flags:
 | `--config PATH` | Load configuration from an explicit path. |
 | `--validate-config` | Validate config and exit. |
 | `--once-status` | Print one status snapshot and exit. |
+| `--simulate` | Run the daemon loop with scripted probes, in-memory shaper, and `/metrics`. |
 | `--version` | Print version and build metadata. |
 
 The first implementation should keep flags minimal. Router admins should not need many flags for normal service use.
+
+### Simulator Command
+
+`aurasim` is a development-only command for offline control-loop checks. It must not touch netlink, qdisc state, firewall rules, or real network interfaces.
+
+| Flag | Meaning |
+| --- | --- |
+| `--config PATH` | Load the same JSON config shape as the daemon. |
+| `--ticks N` | Run a fixed number of control ticks. |
+| `--serve-metrics` | Serve `/metrics` while the simulation runs. |
 
 ## Error Contract
 

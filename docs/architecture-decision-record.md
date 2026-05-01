@@ -50,6 +50,16 @@ PID governor, anti-windup, derivative damping, floor/ceiling enforcement, and pa
 
 Netlink qdisc setup, CAKE option updates, interface discovery, and priority marking hooks.
 
+The first code scaffold includes an in-memory shaper controller. It is only for offline simulation and tests. The netlink-backed controller must be added after hardware validation.
+
+### `internal/probe`
+
+Probe source interfaces and offline scripted probes. Real ICMP and UDP probing should be added after the control loop is validated with the simulator.
+
+### `internal/runtime`
+
+Control-loop orchestration. It connects probe samples, EWMA filtering, the PID governor, the shaper controller, and observability snapshots.
+
 ### `internal/priority`
 
 Gaming device matching and traffic priority policy. This module must stay explicit because a bad priority rule can affect every LAN client.
@@ -106,4 +116,4 @@ Rejected for the first build. SSH and Prometheus are lower cost and fit router a
 
 ## Next Validation Action
 
-Build a small hardware probe after docs approval: detect WAN interface, read current qdisc, and perform a no-op CAKE netlink update on a test interface before implementing the PID loop.
+Run the offline simulator after installing Go. When hardware arrives, build a small hardware probe that detects the WAN interface, reads current qdisc state, and performs a no-op CAKE netlink update on a test interface.

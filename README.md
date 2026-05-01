@@ -31,7 +31,17 @@ The first implementation scaffold supports config validation and one status snap
 ```bash
 go run ./cmd/aurad --config config/example.json --validate-config
 go run ./cmd/aurad --config config/example.json --once-status
+go run ./cmd/aurad --config config/example.json --simulate
 ```
+
+Run the offline simulator without router hardware:
+
+```bash
+go run ./cmd/aurasim --config config/example.json --ticks 120
+go run ./cmd/aurasim --config config/example.json --ticks 120 --serve-metrics
+```
+
+The simulator uses a scripted latency source and an in-memory shaper. It is meant to exercise control behavior before netlink and CAKE are wired to real hardware.
 
 Optional size reduction:
 
@@ -47,6 +57,16 @@ scp aura-sqm root@192.168.10.1:/usr/bin/
 
 The OpenWrt package or init script must install a `procd` service so the daemon starts on boot and restarts on failure.
 
+## Hardware Blockers
+
+The following work needs the JCG Q20 or another OpenWrt router with CAKE support:
+
+- WAN interface auto-discovery validation
+- netlink CAKE qdisc updates
+- priority tin marking on real traffic
+- PID tuning against the ISP path
+- `procd` service validation on-device
+
 ## Documentation Map
 
 - [Project Brief](docs/project-brief.md)
@@ -55,6 +75,7 @@ The OpenWrt package or init script must install a `procd` service so the daemon 
 - [API Contract](docs/api-contract.md)
 - [Data And Configuration Model](docs/database-schema.md)
 - [TUI Design Contract](docs/DESIGN.md)
+- [Hardware Validation Checklist](docs/hardware-validation.md)
 
 ## Git Setup
 
