@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "active-memory-v1",
+  "snapshotPurpose": "compact-cross-session-continuity",
+  "updatePolicy": {
+    "writeWhen": "natural-task-boundary",
+    "overwriteOnlyWithCurrentRepoEvidence": true,
+    "preserveUserOwnedContent": true
+  },
+  "project": {
+    "name": "aura-sqm",
+    "currentFocus": "Documentation-first preparation for an OpenWrt Go daemon that performs adaptive CAKE Smart Queue Management on a JCG Q20 / MT7621 router.",
+    "durableFacts": [
+      "Repository is initialized on branch main with origin https://github.com/fatidaprilian/aura-sqm.git.",
+      "Local Git commit identity is configured as user.name=biqar and user.email=biqar@users.noreply.github.com.",
+      "Aura-SQM target runtime is linux/mipsle on OpenWrt with kmod-sched-cake and procd.",
+      "First implementation should be a single Go daemon with internal modules for config, probe, filter, control, shaper, priority, observe, and tui.",
+      "First build is docs-first only; application code has not been scaffolded yet."
+    ]
+  },
+  "progress": {
+    "lastAchievements": [
+      "Created README.md and project docs for brief, ADR, flow, API/public contracts, data/config model, and TUI design.",
+      "Replaced scaffold design intent with a terminal UI design contract based on a latency oscilloscope anchor.",
+      "Added .gitignore for Go/OpenWrt build outputs, secrets, logs, and local agent artifacts."
+    ],
+    "pendingIssues": [
+      "Router hardware facts still need validation: kernel, installed CAKE module, WAN interface names, CPU/FPU behavior, and flash space.",
+      "GitHub push still depends on available credentials or Source Control authentication."
+    ],
+    "nextBestActions": [
+      "Validate router environment with uname, opkg, interface, qdisc, CPU, and storage commands.",
+      "Choose UCI-native or plain-file configuration before implementing internal/config.",
+      "Create a small hardware probe before implementing the full PID control loop."
+    ],
+    "validationState": [
+      "docs/design-intent.json parsed successfully with Node.",
+      "No package.json exists, so npm run validate is not available yet.",
+      "No application code exists, so build and unit tests are not applicable yet."
+    ]
+  },
+  "designContinuity": {
+    "visualLanguageContinuity": "opt-in-only",
+    "currentConceptualAnchor": "",
+    "forbiddenCarryover": [
+      "prior-project-style-memory",
+      "old-ui-visual-dna-without-user-approval",
+      "generic-dashboard-defaults"
+    ]
+  },
+  "privacy": {
+    "storeSecrets": false,
+    "storeRawChatLogs": false,
+    "redactSensitiveTextBeforeWriting": true
+  },
+  "generatedAt": "2026-05-01T01:17:52.105Z",
+  "lastUpdatedAt": "2026-05-01T08:31:00+07:00"
+}

@@ -1,0 +1,44 @@
+{
+  "project": {
+    "name": "aura-sqm",
+    "uiScope": "SSH terminal user interface and Prometheus metrics, no browser UI in the first build",
+    "targetOperator": "router admin tuning latency-sensitive gaming traffic"
+  },
+  "conceptualAnchor": {
+    "name": "Latency Oscilloscope",
+    "anchorReference": "a live oscilloscope used to tune a control signal",
+    "sourceDomain": "scientific instrumentation",
+    "specificReferencePoint": "stable trace, threshold line, signal health, and damping response",
+    "rationale": "Aura-SQM is a real-time control daemon. The UI should make latency signal quality and shaper response easy to inspect over SSH.",
+    "signatureMotion": "readable periodic refresh with stable layout and no decorative animation",
+    "typographicDecision": "fixed-width numeric fields for rates and latency, short status labels for state, plain text headings for scan speed"
+  },
+  "derivedTokenLogic": {
+    "color": "use terminal-safe status roles only: normal, warning, failure, and muted metadata",
+    "spacing": "compact rows with stable columns so changing values do not shift the layout",
+    "typography": "monospace-first because the TUI runs in SSH terminals and displays numeric telemetry",
+    "motion": "refresh cadence communicates live state; no extra animation is required"
+  },
+  "motionPaletteDecision": {
+    "density": "dense but readable operational view",
+    "palette": "terminal-safe status colors with text labels so color is never the only signal",
+    "spatialDecision": "no 3D or canvas because the first UI is terminal-based and must run over SSH"
+  },
+  "accessibility": {
+    "statusTextRequired": true,
+    "colorOnlyMeaningAllowed": false,
+    "stableLayoutRequired": true,
+    "reducedMotionDefault": true
+  },
+  "libraryResearchStatus": "not-required-for-docs-first-terminal-ui",
+  "libraryDecisions": [
+    {
+      "library": "to-be-decided",
+      "purpose": "TUI rendering after daemon state model exists",
+      "verifiedAt": null,
+      "sourceUrl": null,
+      "fallbackIfUnavailable": "plain terminal output with fixed-width text"
+    }
+  ],
+  "lastUpdatedAt": "2026-05-01"
+}

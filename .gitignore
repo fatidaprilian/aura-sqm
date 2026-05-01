@@ -1,0 +1,45 @@
+# Build output
+aura-sqm
+aurad
+*.ipk
+*.bin
+*.elf
+*.map
+dist/
+build/
+out/
+tmp/
+
+# Go
+vendor/
+coverage.out
+*.test
+
+# Compression artifacts
+*.upx
+
+# Logs and runtime state
+*.log
+*.pid
+*.sock
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Local editor state
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local agent/runtime artifacts
+.codex
+.agentic-backup/
+
