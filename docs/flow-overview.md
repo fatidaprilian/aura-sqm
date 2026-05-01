@@ -2,7 +2,7 @@
 
 ## Startup Flow
 
-1. Load the configuration file from the OpenWrt config path.
+1. Load the JSON configuration file from the OpenWrt config path.
 2. Validate bandwidth limits, latency target, reflector list, and gaming device identity.
 3. Detect WAN and ingress shaping interfaces.
 4. Confirm CAKE availability.
@@ -94,6 +94,12 @@ GOOS=linux GOARCH=mipsle GOMIPS=hardfloat CGO_ENABLED=0 \
 
 upx --brute aura-sqm
 scp aura-sqm root@192.168.10.1:/usr/bin/
+```
+
+Config validation command:
+
+```bash
+aura-sqm --config /etc/aura-sqm/config.json --validate-config
 ```
 
 ## Next Validation Action

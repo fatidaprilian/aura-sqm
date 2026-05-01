@@ -4,7 +4,7 @@
 
 Aura-SQM will not use a database in the first build. Runtime state is kept in memory, exposed through metrics, and rebuilt after service restart.
 
-The durable data model is configuration only.
+The durable data model is configuration only. The first implementation uses JSON at `/etc/aura-sqm/config.json`, with `config/example.json` as the repository example.
 
 ## Rationale
 
@@ -89,10 +89,10 @@ Important state snapshots:
 
 ## Assumptions To Validate
 
-- UCI is the preferred config interface for the target user workflow.
+- UCI may still be the preferred config interface for the final OpenWrt package.
 - The first build can avoid writing historical state to flash.
 - Grafana or another Prometheus consumer will run outside the router.
 
 ## Next Validation Action
 
-Pick the config file format after confirming whether the router admin workflow should be UCI-native or plain-file based.
+Validate whether JSON should remain the daemon-owned format and whether OpenWrt UCI should generate it during service startup.

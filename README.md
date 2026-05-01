@@ -24,6 +24,15 @@ GOOS=linux GOARCH=mipsle GOMIPS=hardfloat CGO_ENABLED=0 \
   go build -trimpath -ldflags="-s -w" -o aura-sqm ./cmd/aurad
 ```
 
+## Local Smoke Commands
+
+The first implementation scaffold supports config validation and one status snapshot:
+
+```bash
+go run ./cmd/aurad --config config/example.json --validate-config
+go run ./cmd/aurad --config config/example.json --once-status
+```
+
 Optional size reduction:
 
 ```bash

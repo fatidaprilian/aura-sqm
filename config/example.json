@@ -1,0 +1,54 @@
+{
+  "shaper": {
+    "wan_interface": "",
+    "auto_discover_wan": true,
+    "upload_floor_mbps": 50,
+    "upload_ceiling_mbps": 100,
+    "download_floor_mbps": 50,
+    "download_ceiling_mbps": 100,
+    "cake_diffserv": "diffserv4",
+    "cake_isolation": "triple-isolate"
+  },
+  "control": {
+    "loop_interval_ms": 50,
+    "target_latency_ms": 8,
+    "kp": 0.2,
+    "ki": 0.02,
+    "kd": 0.01,
+    "integral_min": -1,
+    "integral_max": 1,
+    "max_rate_delta_mbps": 5
+  },
+  "probe": {
+    "reflectors": [
+      {
+        "id": "cloudflare",
+        "host": "1.1.1.1",
+        "kind": "public",
+        "enabled": true
+      },
+      {
+        "id": "google",
+        "host": "8.8.8.8",
+        "kind": "public",
+        "enabled": true
+      }
+    ],
+    "protocols": ["icmp", "udp"],
+    "timeout_ms": 500,
+    "fast_ewma_alpha": 0.3,
+    "slow_ewma_alpha": 0.1,
+    "outlier_threshold": 2
+  },
+  "priority": {
+    "enabled": true,
+    "device_ip": "192.168.10.50",
+    "device_mac": "",
+    "target_tin": "voice"
+  },
+  "observability": {
+    "metrics_listen": "127.0.0.1:9108",
+    "log_level": "info",
+    "tui_enabled": true
+  }
+}

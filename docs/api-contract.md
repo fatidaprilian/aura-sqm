@@ -48,7 +48,13 @@ Metric labels must stay low-cardinality. Do not label metrics with raw IP addres
 
 ## Configuration Contract
 
-The first config format should be OpenWrt-friendly. The implementation may use UCI integration or a simple config file, but the selected format must be documented before coding.
+The first config format is JSON. This keeps the first daemon scaffold dependency-free and easy to validate with the Go standard library. A later OpenWrt package may add a UCI adapter, but the daemon must keep one normalized internal config shape.
+
+Default path:
+
+```text
+/etc/aura-sqm/config.json
+```
 
 Required fields:
 
