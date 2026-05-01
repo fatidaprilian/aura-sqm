@@ -13,7 +13,7 @@ func TestPIDClampsRateDelta(t *testing.T) {
 	})
 
 	decision := pid.Step(Input{
-		TargetLatencySeconds:  0.010,
+		TargetLatencySeconds:  0.020,
 		CurrentLatencySeconds: 0.001,
 		CurrentRateBPS:        50_000_000,
 		FloorBPS:              10_000_000,

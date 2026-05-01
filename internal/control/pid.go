@@ -10,10 +10,10 @@ type PIDConfig struct {
 }
 
 type PID struct {
-	cfg          PIDConfig
-	integral     float64
-	previousErr  float64
-	hasPrevious  bool
+	cfg         PIDConfig
+	integral    float64
+	previousErr float64
+	hasPrevious bool
 }
 
 type Input struct {

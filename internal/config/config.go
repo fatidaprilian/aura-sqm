@@ -27,13 +27,13 @@ type ShaperSettings struct {
 }
 
 type ControlSettings struct {
-	LoopIntervalMS  int     `json:"loop_interval_ms"`
-	TargetLatencyMS float64 `json:"target_latency_ms"`
-	KP              float64 `json:"kp"`
-	KI              float64 `json:"ki"`
-	KD              float64 `json:"kd"`
-	IntegralMin     float64 `json:"integral_min"`
-	IntegralMax     float64 `json:"integral_max"`
+	LoopIntervalMS   int     `json:"loop_interval_ms"`
+	TargetLatencyMS  float64 `json:"target_latency_ms"`
+	KP               float64 `json:"kp"`
+	KI               float64 `json:"ki"`
+	KD               float64 `json:"kd"`
+	IntegralMin      float64 `json:"integral_min"`
+	IntegralMax      float64 `json:"integral_max"`
 	MaxRateDeltaMbps float64 `json:"max_rate_delta_mbps"`
 }
 

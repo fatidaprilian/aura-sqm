@@ -25,24 +25,24 @@
       "Replaced scaffold design intent with a terminal UI design contract based on a latency oscilloscope anchor.",
       "Added .gitignore for Go/OpenWrt build outputs, secrets, logs, and local agent artifacts.",
       "Added dependency-free Go scaffold with config validation, EWMA filtering, PID control, text/Prometheus rendering, tests, and config/example.json.",
-      "Added offline runtime engine, scripted probe source, in-memory shaper, /metrics server, aurasim command, aurad --simulate mode, OpenWrt procd init skeleton, and router snapshot checklist."
+      "Added offline runtime engine, scripted probe source, in-memory shaper, /metrics server, aurasim command, aurad --simulate mode, OpenWrt procd init skeleton, and router snapshot checklist.",
+      "Validated the Go project locally with gofmt, go test ./..., and aurasim --ticks 120 after installing Go 1.26.2."
     ],
     "pendingIssues": [
       "Router hardware facts still need validation: kernel, installed CAKE module, WAN interface names, CPU/FPU behavior, qdisc behavior, and flash space.",
-      "GitHub push still depends on available credentials or Source Control authentication.",
-      "Go toolchain is not installed in the current environment, so gofmt and go test could not run here."
+      "GitHub push still depends on available credentials or Source Control authentication."
     ],
     "nextBestActions": [
       "Validate router environment with uname, opkg, interface, qdisc, CPU, and storage commands.",
-      "Install Go locally or run validation in an environment with Go, then run gofmt and go test ./...",
-      "Run aurad --simulate or aurasim once Go is installed.",
       "Create a small hardware probe before wiring netlink CAKE updates into the full control loop."
     ],
     "validationState": [
       "docs/design-intent.json parsed successfully with Node.",
       "config/example.json parsed successfully with Node.",
       "No package.json exists, so npm run validate is not available yet.",
-      "gofmt and go test are blocked because go is not installed in this environment.",
+      "gofmt -w ./cmd ./internal completed with formatting-only changes plus one PID clamp test input correction.",
+      "go test ./... passed using GOCACHE=/tmp/aura-sqm-go-cache.",
+      "go run ./cmd/aurasim --config config/example.json --ticks 120 completed successfully.",
       "OpenWrt service and router snapshot scripts were reviewed but not run against hardware."
     ]
   },
@@ -61,5 +61,5 @@
     "redactSensitiveTextBeforeWriting": true
   },
   "generatedAt": "2026-05-01T01:17:52.105Z",
-  "lastUpdatedAt": "2026-05-01T09:18:00+07:00"
+  "lastUpdatedAt": "2026-05-01T09:34:47+07:00"
 }

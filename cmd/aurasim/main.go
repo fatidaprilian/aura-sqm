@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/fatidaprilian/aura-sqm/internal/config"
-	auraruntime "github.com/fatidaprilian/aura-sqm/internal/runtime"
 	"github.com/fatidaprilian/aura-sqm/internal/observe"
 	"github.com/fatidaprilian/aura-sqm/internal/probe"
+	auraruntime "github.com/fatidaprilian/aura-sqm/internal/runtime"
 	"github.com/fatidaprilian/aura-sqm/internal/shaper"
 )
 
