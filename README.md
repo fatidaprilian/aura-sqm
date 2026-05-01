@@ -88,8 +88,8 @@ git remote add origin https://github.com/fatidaprilian/aura-sqm.git
 Local commit identity is expected to use:
 
 ```bash
-git config user.name biqar
-git config user.email biqar@users.noreply.github.com
+git config user.name fatidaprilian
+git config user.email fatidaprilian@users.noreply.github.com
 ```
 
 GitHub authentication for pushing is separate from commit identity. Source Control should prompt for a GitHub login or token when credentials are not already available.
