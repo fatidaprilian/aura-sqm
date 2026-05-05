@@ -36,6 +36,33 @@ func TestEngineTickUpdatesSnapshot(t *testing.T) {
 	}
 }
 
+func TestEngineTickReducesUploadAndDownloadWhenLatencyIsHigh(t *testing.T) {
+	cfg := testConfig()
+	controller := shaper.NewMemoryController(shaper.Rates{
+		UploadBPS:   cfg.Shaper.UploadCeilingMbps * 1_000_000,
+		DownloadBPS: cfg.Shaper.DownloadCeilingMbps * 1_000_000,
+	})
+	source := &probe.ScriptedSource{
+		ReflectorID:   "test",
+		Protocol:      "icmp",
+		BaseLatency:   0.050,
+		BufferLatency: 0,
+	}
+	engine := NewEngine(cfg, source, controller)
+
+	if err := engine.Tick(context.Background()); err != nil {
+		t.Fatalf("tick failed: %v", err)
+	}
+
+	rates := controller.Current()
+	if rates.UploadBPS >= cfg.Shaper.UploadCeilingMbps*1_000_000 {
+		t.Fatalf("expected upload to reduce below ceiling, got %.0f", rates.UploadBPS)
+	}
+	if rates.DownloadBPS >= cfg.Shaper.DownloadCeilingMbps*1_000_000 {
+		t.Fatalf("expected download to reduce below ceiling, got %.0f", rates.DownloadBPS)
+	}
+}
+
 func testConfig() config.Config {
 	return config.Config{
 		Shaper: config.ShaperSettings{

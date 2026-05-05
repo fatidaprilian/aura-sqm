@@ -13,7 +13,15 @@ The first target is a JCG Q20 router with a MediaTek MT7621 processor, 128 MB RA
 - The first shaper backend is Linux CAKE.
 - The control loop must adjust upload and download bandwidth limits dynamically.
 - The control logic must use latency error, smoothing, anti-windup, and safe fallback behavior.
-- The repository is currently in documentation-first mode. No application code has been created yet.
+- The repository now has a first Go scaffold with config validation, an offline simulator, an in-memory shaper, a PID control loop, text status output, and a Prometheus metrics endpoint.
+- The real OpenWrt CAKE/netlink shaper is not wired yet.
+- Hardware has arrived for the first validation target: JCG Q20 on OpenWrt 22.03-SNAPSHOT with Linux 5.10.168.
+- The router currently lacks `tc` and `kmod-sched-cake`; both must be installed before any CAKE validation or real shaper writes.
+- The configured OpenWrt `22.03-SNAPSHOT` package feeds currently fail during `opkg update`; do not update firmware just to satisfy Aura-SQM package dependencies.
+- The router feed config currently points only at `22.03-SNAPSHOT` paths for `ramips/mt7621` and `mipsel_24kc/base`; do not rewrite feeds or flash firmware without an explicit operator decision.
+- Router SSH confirms `arch mipsel_24kc 10`, Linux `5.10.168`, and an OpenWrt GCC target of `mipsel-openwrt-linux-musl-gcc`.
+- Router preflight builds default to `GOMIPS=softfloat` until hardfloat behavior is proven on-device.
+- The softfloat `linux/mipsle` binary runs from `/tmp` on the router and validates the example config without installing a persistent service.
 
 ## Product Objectives
 
@@ -85,11 +93,11 @@ Aura-SQM includes a simulator path that runs the governor against scripted laten
 ## Assumptions To Validate
 
 - The JCG Q20 firmware image includes or can install `kmod-sched-cake`.
-- The MT7621 floating point behavior works with `GOMIPS=hardfloat` on the target OpenWrt build.
+- `GOMIPS=hardfloat` may improve floating-point control-loop cost, but it must be tested explicitly on the target before replacing the softfloat preflight default.
 - The ISP gateway responds consistently enough to be used as one reflector.
 - The gaming device can be identified reliably by static IP, DHCP lease, or MAC address.
 - The current OpenWrt image has enough flash space for the compressed binary and service files.
 
 ## Next Validation Action
 
-Install the Go toolchain locally, run the offline simulator and tests, then confirm the router output for `uname -a`, `opkg list-installed | grep cake`, WAN interface names, CPU model, and available flash space when the hardware arrives.
+Resolve the package feed issue without firmware flashing, install `tc`, `kmod-sched-cake`, and an ingress helper such as `kmod-ifb` only when ABI-compatible packages are available, then capture `tc -s qdisc show` and validate the cross-compiled daemon from `/tmp` before enabling netlink-backed CAKE writes.

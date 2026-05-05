@@ -79,6 +79,8 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Responsive behavior recomposes content and priority, not only shrinking desktop layout.
 - [ ] Accessibility hard requirements are preserved: keyboard access, focus visibility, contrast, target size, status feedback, and no color-only meaning.
 - [ ] Motion is treated as part of the design language for modern UI work, with reduced-motion and performance safeguards instead of defaulting to static screens.
+- [ ] Broad redesigns pass the old-design regression test: the result is not the previous composition with animation, depth, media, or interaction density removed.
+- [ ] UI work records an agent-chosen ambition level; broad screens and redesigns researched an expressive path first, and any downshift names a concrete blocker plus replacement interaction quality.
 
 ## 8. Dependencies And Runtime
 

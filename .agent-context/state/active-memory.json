@@ -16,7 +16,13 @@
       "First implementation should be a single Go daemon with internal modules for config, probe, filter, control, shaper, priority, observe, and tui.",
       "The first config format is JSON at /etc/aura-sqm/config.json, with UCI left as a later OpenWrt adapter option.",
       "Initial code scaffold exists for cmd/aurad, cmd/aurasim, internal/config, internal/filter, internal/control, internal/observe, internal/probe, internal/runtime, and internal/shaper.",
-      "Real netlink CAKE writes remain blocked until router hardware validation is complete."
+      "Real netlink CAKE writes remain blocked until router hardware validation is complete.",
+      "First target hardware snapshot confirms JCG Q20 on OpenWrt 22.03-SNAPSHOT, Linux 5.10.168, MediaTek MT7621, WAN interface wan, and LAN bridge br-lan.",
+      "Router SSH snapshot shows tc and kmod-sched-cake are not installed yet.",
+      "The router's configured 22.03-SNAPSHOT opkg feeds currently fail during opkg update; firmware flashing is out of scope for Aura-SQM validation.",
+      "The router feed config points only at 22.03-SNAPSHOT ramips/mt7621 and mipsel_24kc/base paths; do not rewrite feeds without explicit operator approval.",
+      "Router preflight builds default to GOMIPS=softfloat until hardfloat behavior is tested successfully on-device.",
+      "The softfloat linux/mipsle Aura-SQM binary runs from /tmp on the router and validates config/example.json without installing a persistent service."
     ]
   },
   "progress": {
@@ -26,14 +32,18 @@
       "Added .gitignore for Go/OpenWrt build outputs, secrets, logs, and local agent artifacts.",
       "Added dependency-free Go scaffold with config validation, EWMA filtering, PID control, text/Prometheus rendering, tests, and config/example.json.",
       "Added offline runtime engine, scripted probe source, in-memory shaper, /metrics server, aurasim command, aurad --simulate mode, OpenWrt procd init skeleton, and router snapshot checklist.",
-      "Validated the Go project locally with gofmt, go test ./..., and aurasim --ticks 120 after installing Go 1.26.2."
+      "Validated the Go project locally with gofmt, go test ./..., and aurasim --ticks 120 after installing Go 1.26.2.",
+      "Updated the runtime simulator so separate PID state adjusts both upload and download rates, and documented the first hardware snapshot.",
+      "Added SSH-key bootstrap and /tmp-only router deployment validation scripts for safe OpenWrt preflight.",
+      "Validated the softfloat OpenWrt build on the router from /tmp; --validate-config and --once-status passed."
     ],
     "pendingIssues": [
-      "Router hardware facts still need validation: kernel, installed CAKE module, WAN interface names, CPU/FPU behavior, qdisc behavior, and flash space.",
+      "Router hardware facts still need validation: resolving package feeds without firmware flashing, installing ABI-compatible CAKE/tc dependencies, qdisc behavior after tc install, ingress shaping strategy, and CPU/FPU build behavior.",
       "GitHub push still depends on available credentials or Source Control authentication."
     ],
     "nextBestActions": [
-      "Validate router environment with uname, opkg, interface, qdisc, CPU, and storage commands.",
+      "Find an ABI-compatible package path for tc, kmod-sched-cake, and kmod-ifb without firmware flashing, then capture tc -s qdisc show.",
+      "Install key-based SSH access or run scripts from an interactive terminal before collecting the router snapshot.",
       "Create a small hardware probe before wiring netlink CAKE updates into the full control loop."
     ],
     "validationState": [
@@ -43,7 +53,16 @@
       "gofmt -w ./cmd ./internal completed with formatting-only changes plus one PID clamp test input correction.",
       "go test ./... passed using GOCACHE=/tmp/aura-sqm-go-cache.",
       "go run ./cmd/aurasim --config config/example.json --ticks 120 completed successfully.",
-      "OpenWrt service and router snapshot scripts were reviewed but not run against hardware."
+      "go test ./... passed after two-direction simulator shaping changes.",
+      "go run ./cmd/aurasim --config config/example.json --ticks 3 showed upload and download both reducing from ceiling under high simulated latency.",
+      "OpenWrt SSH is reachable from the host network, but automated SSH failed because password/askpass authentication is required.",
+      "Manual SSH snapshot confirmed tc is missing, kmod-sched-cake is missing, overlay has 66.8 MB available, /tmp has 121.9 MB available, wan is 192.168.1.2/24, and br-lan is 192.168.10.1/24.",
+      "Manual SSH confirmed opkg architecture mipsel_24kc, kernel 5.10.168, and mipsel-openwrt-linux-musl-gcc for revision r20069-292184b6aa.",
+      "Manual opkg update failed against configured 22.03-SNAPSHOT feeds; opkg install tc-tiny failed because package lists were unavailable.",
+      "Shell syntax validation passed for router-authorize-key.sh, router-deploy-validate.sh, and router-snapshot.sh.",
+      "Cross-compilation to build/aura-sqm-openwrt-mipsle for linux/mipsle hardfloat passed locally.",
+      "Router /tmp preflight passed: AURA_CONFIG_OK and once-status showed 100000000 bps upload/download with healthy probe state.",
+      "OpenWrt service and router snapshot scripts were reviewed but not run successfully against hardware."
     ]
   },
   "designContinuity": {
@@ -61,5 +80,5 @@
     "redactSensitiveTextBeforeWriting": true
   },
   "generatedAt": "2026-05-01T01:17:52.105Z",
-  "lastUpdatedAt": "2026-05-01T09:34:47+07:00"
+  "lastUpdatedAt": "2026-05-05T21:00:00+07:00"
 }

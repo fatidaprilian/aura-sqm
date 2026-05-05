@@ -1,18 +1,17 @@
 {
-  "cliVersion": "3.0.40",
-  "generatedAt": "2026-05-01T01:17:52.163Z",
-  "operationMode": "init",
+  "cliVersion": "3.0.42",
+  "generatedAt": "2026-05-05T12:23:17.244Z",
+  "operationMode": "upgrade",
   "selectedProfile": "balanced",
-  "selectedPreset": null,
   "projectScope": {
     "key": "both",
     "label": "Both (frontend + backend)"
   },
-  "projectTopology": "Agent recommendation required from current brief, repo evidence, and live official docs",
+  "projectTopology": null,
   "runtimeDecision": {
     "mode": "agent-decision-required",
     "explicitStack": null,
-    "detectedStackEvidence": null,
+    "detectedStackEvidence": "go.md",
     "detectedAdditionalStackEvidence": []
   },
   "architectureDecision": {
@@ -34,7 +33,7 @@
     "agentDecisionRequired": true
   },
   "ciGuardrailsEnabled": true,
-  "setupDurationMs": 89525,
+  "setupDurationMs": 159,
   "runtimeEnvironment": {
     "selected": "linux-wsl",
     "selectedLabel": "Linux / WSL",
@@ -43,12 +42,122 @@
     "detectionSource": "WSL environment markers"
   },
   "tokenOptimization": {
+    "schemaVersion": "token-optimization-v1",
     "enabled": true,
     "selectedAgent": "copilot",
     "preferredShellProxy": "native-fallback",
-    "stateFile": ".agent-context/state/token-optimization.json"
+    "externalProxy": {
+      "detected": false,
+      "version": null,
+      "detectionError": "Unknown external proxy detection error"
+    },
+    "commandRewriteMappings": [
+      {
+        "rawCommand": "ls -la",
+        "optimizedCommand": "rtk ls .",
+        "reason": "Directory listings are grouped and compacted before entering the model context."
+      },
+      {
+        "rawCommand": "tree",
+        "optimizedCommand": "rtk ls .",
+        "reason": "Large trees are summarized without losing high-signal structure."
+      },
+      {
+        "rawCommand": "cat file.ext",
+        "optimizedCommand": "rtk read file.ext",
+        "reason": "File reads keep signatures and relevant lines while trimming boilerplate."
+      },
+      {
+        "rawCommand": "rg pattern .",
+        "optimizedCommand": "rtk grep \"pattern\" .",
+        "reason": "Search hits are grouped and deduplicated for faster reasoning."
+      },
+      {
+        "rawCommand": "git status",
+        "optimizedCommand": "rtk git status",
+        "reason": "Status output is condensed to actionable file changes."
+      },
+      {
+        "rawCommand": "git diff",
+        "optimizedCommand": "rtk git diff",
+        "reason": "Diff noise is trimmed while preserving code-review context."
+      },
+      {
+        "rawCommand": "git log -n 10",
+        "optimizedCommand": "rtk git log -n 10",
+        "reason": "History is converted to compact one-line summaries."
+      },
+      {
+        "rawCommand": "npm test",
+        "optimizedCommand": "rtk test npm test",
+        "reason": "Test results emphasize failures and suppress repetitive pass logs."
+      },
+      {
+        "rawCommand": "npm run build",
+        "optimizedCommand": "rtk err npm run build",
+        "reason": "Build runs return errors and warnings only for quicker remediation."
+      },
+      {
+        "rawCommand": "tsc --noEmit",
+        "optimizedCommand": "rtk tsc",
+        "reason": "TypeScript diagnostics are grouped by file with less repetition."
+      },
+      {
+        "rawCommand": "eslint .",
+        "optimizedCommand": "rtk lint",
+        "reason": "Lint output is grouped by rule and location to reduce token churn."
+      },
+      {
+        "rawCommand": "docker ps",
+        "optimizedCommand": "rtk docker ps",
+        "reason": "Container state is summarized into compact rows."
+      },
+      {
+        "rawCommand": "kubectl get pods",
+        "optimizedCommand": "rtk kubectl pods",
+        "reason": "Kubernetes output is condensed and stable for agent consumption."
+      }
+    ],
+    "outputFoldingStrategy": {
+      "mode": "compact-high-signal-output",
+      "appliesTo": [
+        "shell-command-output",
+        "test-output",
+        "build-output",
+        "diff-output",
+        "log-output"
+      ],
+      "preserveAlways": [
+        "exit-code",
+        "failing-command",
+        "file-and-line",
+        "error-message",
+        "actionable-warning"
+      ],
+      "foldByDefault": [
+        "repeated-success-lines",
+        "large-unchanged-diff-context",
+        "verbose-install-progress",
+        "duplicated-stack-frames",
+        "low-signal-directory-noise"
+      ],
+      "nativeFallback": [
+        "prefer --stat or --name-only before full diff",
+        "prefer focused rg queries before broad file dumps",
+        "prefer failure-focused test reporters when available",
+        "summarize long logs before hydrating full detail"
+      ],
+      "safetyBoundary": [
+        "never hide failing checks",
+        "never drop the command that produced output",
+        "never persist secrets into summaries",
+        "hydrate full output only when the compact summary is insufficient"
+      ]
+    },
+    "generatedAt": "2026-05-01T01:17:52.138Z"
   },
   "memoryContinuity": {
+    "schemaVersion": "memory-continuity-v1",
     "enabled": true,
     "hydrationMode": "progressive-disclosure",
     "adapters": [
@@ -56,25 +165,42 @@
       "gemini-cli",
       "vscode-chat"
     ],
-    "stateFile": ".agent-context/state/memory-continuity.json",
-    "activeSnapshotFile": ".agent-context/state/active-memory.json"
+    "retrieval": {
+      "sessionStartIndexLimit": 8,
+      "fullHydrationLimit": 2
+    },
+    "privacy": {
+      "redactPrivateTags": true,
+      "redactInlineSensitivePatterns": true
+    },
+    "generatedAt": "2026-05-01T01:17:52.104Z"
   },
   "autoDetection": {
-    "detectedStack": null,
+    "detectedStack": "go.md",
     "detectedAdditionalStacks": [],
     "detectedBlueprint": null,
     "detectedAdditionalBlueprints": [],
-    "confidenceLabel": null,
-    "confidenceScore": 0,
-    "confidenceGap": 0,
-    "detectionReasoning": "No known project markers were detected.",
-    "rankedCandidates": [],
-    "evidence": [],
+    "confidenceLabel": "high",
+    "confidenceScore": 0.96,
+    "confidenceGap": 0.96,
+    "detectionReasoning": "Top signal Go won with confidence 0.96 from markers: go.mod.",
+    "rankedCandidates": [
+      {
+        "stackFileName": "go.md",
+        "confidenceScore": 0.96,
+        "evidence": [
+          "go.mod"
+        ]
+      }
+    ],
+    "evidence": [
+      "go.mod"
+    ],
     "detectionTransparency": {
-      "declaredAt": "2026-05-01T01:16:22.645Z",
-      "declarationType": "fresh-project",
-      "declarationShown": false,
-      "detectionSummary": "No existing project markers were detected.",
+      "declaredAt": "2026-05-05T12:23:17.118Z",
+      "declarationType": "existing-project",
+      "declarationShown": true,
+      "detectionSummary": "This folder looks like Go with high confidence based on go.mod. Confidence gap: 0.96.",
       "activeRulesSummary": {
         "canonicalSource": ".instructions.md",
         "compiledRulebook": ".agent-instructions.md",
@@ -105,26 +231,142 @@
       },
       "majorConstraints": [
         "Preserve existing project markers and avoid forced stack migration.",
-        "Use detected runtime markers as evidence only; do not convert them into stack migration or design direction.",
-        "Explicit stack or blueprint overrides are constraints only when the user provides them."
+        "Use runtime markers as evidence only unless the user already recorded an explicit runtime constraint.",
+        "Upgrade keeps prior explicit onboarding constraints but does not create new stack or blueprint decisions."
       ],
       "quickConfirmation": {
         "offered": false,
-        "response": "not-applicable",
-        "source": "existing-project-detection"
+        "response": "upgrade-auto",
+        "source": "upgrade-assistant"
       },
       "decision": {
-        "mode": "fresh-agent-decision-required",
+        "mode": "upgrade-auto",
         "selectedStackFileName": "agent-decision-runtime.md",
-        "selectedBlueprintFileName": "agent-decision-architecture.md",
-        "selectedAdditionalStackFileNames": [],
-        "selectedAdditionalBlueprintFileNames": [],
-        "usedDetectedSetup": false,
-        "selectedProjectScopeKey": "both",
-        "selectedProjectScopeLabel": "Both (frontend + backend)"
-      },
-      "projectContextEvidence": null
+        "selectedBlueprintFileName": "agent-decision-architecture.md"
+      }
     },
-    "uiScope": null
+    "uiScope": {
+      "isUiScopeLikely": true,
+      "signalReasons": [
+        "onboarding project scope: both"
+      ],
+      "workspaceUiEntries": [],
+      "frontendEvidenceMetrics": {
+        "scannedFileCount": 0,
+        "hardcodedColorCount": 0,
+        "propDrillingCandidateCount": 0,
+        "mediaQueryCount": 0,
+        "tailwindBreakpointUsageCount": 0,
+        "arbitraryBreakpointCount": 0,
+        "uniqueMediaWidthCount": 0,
+        "structuredClassAttributeCount": 0,
+        "boundClassExpressionCount": 0,
+        "inlineStyleObjectCount": 0,
+        "inlineStyleBindingCount": 0,
+        "inlineStyleTokenBypassCount": 0
+      },
+      "designEvidenceSummary": {
+        "summaryVersion": "v1",
+        "source": "lightweight-static-scan",
+        "scanRootRelativePaths": [
+          "."
+        ],
+        "scannedFileCount": 0,
+        "cssVariables": {
+          "definitionCount": 0,
+          "referenceCount": 0,
+          "sampleNames": [],
+          "categoryCounts": {
+            "color": 0,
+            "spacing": 0,
+            "radius": 0,
+            "shadow": 0,
+            "typography": 0,
+            "motion": 0,
+            "other": 0
+          }
+        },
+        "colors": {
+          "hardcodedCount": 0,
+          "kindCounts": {
+            "hex": 0,
+            "rgb": 0,
+            "hsl": 0,
+            "oklch": 0,
+            "other": 0
+          },
+          "sampleValues": []
+        },
+        "spacing": {
+          "rawValueCount": 0,
+          "sampleValues": []
+        },
+        "radius": {
+          "rawValueCount": 0,
+          "sampleValues": []
+        },
+        "shadow": {
+          "rawValueCount": 0,
+          "sampleValues": []
+        },
+        "typography": {
+          "fontFamilyCount": 0,
+          "fontSizeCount": 0,
+          "lineHeightCount": 0,
+          "letterSpacingCount": 0,
+          "fontFamilySamples": [],
+          "fontSizeSamples": [],
+          "lineHeightSamples": [],
+          "letterSpacingSamples": []
+        },
+        "motion": {
+          "transitionCount": 0,
+          "animationCount": 0,
+          "durationCount": 0,
+          "durationSamples": []
+        },
+        "tailwind": {
+          "breakpointUsageCount": 0,
+          "arbitraryBreakpointCount": 0,
+          "utilityFamilyCounts": {},
+          "utilityFamilySamples": []
+        },
+        "componentInventory": {
+          "componentFileCount": 0,
+          "pageFileCount": 0,
+          "layoutFileCount": 0,
+          "surfaceFileSamples": []
+        },
+        "structuredInspection": {
+          "mode": "attribute-aware-static-scan",
+          "classAttributeCount": 0,
+          "boundClassExpressionCount": 0,
+          "inlineStyleObjectCount": 0,
+          "inlineStyleBindingCount": 0,
+          "classAttributeSamples": [],
+          "inlineStyleSamples": [],
+          "utilityFamilyCounts": {},
+          "utilityFamilySamples": [],
+          "inlineTokenBypassSignals": {
+            "hardcodedColorCount": 0,
+            "rawSpacingCount": 0,
+            "rawRadiusCount": 0,
+            "rawShadowCount": 0,
+            "cssVariableReferenceCount": 0
+          }
+        },
+        "tokenBypassSignals": {
+          "hardcodedColorCount": 0,
+          "rawSpacingCount": 0,
+          "rawRadiusCount": 0,
+          "rawShadowCount": 0,
+          "inlineHardcodedColorCount": 0,
+          "inlineRawSpacingCount": 0,
+          "inlineRawRadiusCount": 0,
+          "inlineRawShadowCount": 0,
+          "inlineCssVariableReferenceCount": 0
+        }
+      }
+    }
   }
 }

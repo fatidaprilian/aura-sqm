@@ -110,7 +110,7 @@ The initial OpenWrt init skeleton lives at `packaging/openwrt/aura-sqm.init`.
 Planned commands:
 
 ```bash
-GOOS=linux GOARCH=mipsle GOMIPS=hardfloat CGO_ENABLED=0 \
+GOOS=linux GOARCH=mipsle GOMIPS=softfloat CGO_ENABLED=0 \
   go build -trimpath -ldflags="-s -w" -o aura-sqm ./cmd/aurad
 
 upx --brute aura-sqm

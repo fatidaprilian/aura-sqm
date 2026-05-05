@@ -4,6 +4,13 @@ set -eu
 HOST="${1:-root@192.168.10.1}"
 
 ssh "$HOST" '
+echo "## board"
+ubus call system board || true
+
+echo "## release"
+cat /etc/openwrt_release || true
+cat /etc/os-release || true
+
 echo "## uname"
 uname -a
 
@@ -18,9 +25,13 @@ free
 
 echo "## cake packages"
 opkg list-installed | grep -E "kmod-sched-cake|tc|ip-full|ip-tiny" || true
+which tc || true
+tc -V || true
+lsmod | grep -E "sch_cake|ifb" || true
 
 echo "## interfaces"
 ip link show
+ip -d link show
 
 echo "## addresses"
 ip addr show
@@ -30,4 +41,8 @@ ip route show
 
 echo "## qdisc"
 tc qdisc show || true
+tc -s qdisc show || true
+
+echo "## network config"
+uci show network || true
 '

@@ -43,6 +43,8 @@ For new screens or broad redesigns, make at least three at-a-glance product-spec
 
 Use the rename test: if the UI can be renamed to another product category without changing composition, palette, iconography, and motion language, revise before implementation is considered complete.
 
+Use the old-design regression test for broad redesigns: if the UI reads as the previous design with fewer details, removed animation, simplified sections, or a new palette on the same composition, revise before implementation is considered complete.
+
 Background lines, grids, scanlines, noise, glows, blobs, abstract logos, and decorative geometry are invalid as wallpaper. Do not use grid or line backgrounds as first-output filler. Use them only for a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
 
 ## Dynamic Anchor Gate
@@ -64,6 +66,7 @@ If the user gives no current-task visual research or reference:
 - Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, cyber-neon terminals, or uniform card surfaces without product evidence.
 - Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options.
 - Omit rich motion or spatial UI only after naming the product-fit reason and the replacement interaction quality.
+- For new screens or broad redesigns, research the expressive implementation path instead of defaulting to static native CSS. Use native or already-installed tools only when they can still deliver the chosen ambition, or when a concrete blocker is documented.
 - Keep reduced-motion, keyboard, loading, performance, mobile, and non-3D fallbacks explicit.
 
 ## Zero-Based Redesign
@@ -74,6 +77,7 @@ If the user asks for a redesign from zero:
 - Rewrite or materially update both design docs before coding.
 - Change primary composition, content hierarchy, interaction model, and responsive information architecture.
 - Reject palette swaps, dark-mode flips, and restyled heroes.
+- Reject implementations that remove animation, media, depth, or interaction density merely to reduce complexity when the request calls for a more distinctive experience.
 
 ## Responsive Mutation
 

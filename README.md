@@ -6,7 +6,9 @@ The goal is simple: keep latency low during gaming and heavy household traffic b
 
 ## Current Status
 
-This repository is in documentation-first preparation. Application code is intentionally not scaffolded yet. The first implementation phase should use the docs in `docs/` as the source of truth.
+This repository now has the first Go scaffold: config validation, status output, an offline simulator, an in-memory shaper, a PID control loop, and a Prometheus metrics endpoint. The simulator adjusts upload and download rates dynamically.
+
+Real OpenWrt CAKE/netlink writes are still blocked on hardware validation. Do not run the daemon expecting it to change router qdisc state until that backend is implemented and tested on the target device.
 
 ## Target Runtime
 
@@ -20,7 +22,7 @@ This repository is in documentation-first preparation. Application code is inten
 ## Planned Build Command
 
 ```bash
-GOOS=linux GOARCH=mipsle GOMIPS=hardfloat CGO_ENABLED=0 \
+GOOS=linux GOARCH=mipsle GOMIPS=softfloat CGO_ENABLED=0 \
   go build -trimpath -ldflags="-s -w" -o aura-sqm ./cmd/aurad
 ```
 
@@ -42,6 +44,28 @@ go run ./cmd/aurasim --config config/example.json --ticks 120 --serve-metrics
 ```
 
 The simulator uses a scripted latency source and an in-memory shaper. It is meant to exercise control behavior before netlink and CAKE are wired to real hardware.
+
+## Router Validation Over SSH
+
+If the router only accepts password login, first install your local SSH public key into OpenWrt Dropbear:
+
+```bash
+sh scripts/router-authorize-key.sh root@192.168.10.1
+```
+
+Then collect a read-only hardware snapshot:
+
+```bash
+sh scripts/router-snapshot.sh root@192.168.10.1
+```
+
+Before persistent installation, validate the OpenWrt build from `/tmp` only:
+
+```bash
+sh scripts/router-deploy-validate.sh root@192.168.10.1 config/example.json
+```
+
+This copies the binary and config to `/tmp`, runs `--validate-config`, and prints `--once-status`. It does not install or enable the `procd` service.
 
 Optional size reduction:
 

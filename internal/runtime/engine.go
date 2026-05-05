@@ -17,7 +17,8 @@ type Engine struct {
 	cfg       config.Config
 	source    probe.Source
 	shaper    shaper.Controller
-	governor  *control.PID
+	uploadPID *control.PID
+	downPID   *control.PID
 	fastEWMA  filter.EWMA
 	slowEWMA  filter.EWMA
 	mu        sync.RWMutex
@@ -31,7 +32,15 @@ func NewEngine(cfg config.Config, source probe.Source, controller shaper.Control
 		cfg:    cfg,
 		source: source,
 		shaper: controller,
-		governor: control.NewPID(control.PIDConfig{
+		uploadPID: control.NewPID(control.PIDConfig{
+			KP:              cfg.Control.KP,
+			KI:              cfg.Control.KI,
+			KD:              cfg.Control.KD,
+			IntegralMin:     cfg.Control.IntegralMin,
+			IntegralMax:     cfg.Control.IntegralMax,
+			MaxRateDeltaBPS: cfg.Control.MaxRateDeltaMbps * 1_000_000,
+		}),
+		downPID: control.NewPID(control.PIDConfig{
 			KP:              cfg.Control.KP,
 			KI:              cfg.Control.KI,
 			KD:              cfg.Control.KD,
@@ -84,7 +93,7 @@ func (e *Engine) Tick(ctx context.Context) error {
 		}
 	}
 
-	decision := e.governor.Step(control.Input{
+	uploadDecision := e.uploadPID.Step(control.Input{
 		TargetLatencySeconds:  e.cfg.Control.TargetLatencyMS / 1000,
 		CurrentLatencySeconds: fastLatency,
 		CurrentRateBPS:        current.UploadBPS,
@@ -93,10 +102,19 @@ func (e *Engine) Tick(ctx context.Context) error {
 		DeltaSeconds:          float64(e.cfg.Control.LoopIntervalMS) / 1000,
 		ProbeHealthy:          sample.Healthy,
 	})
+	downloadDecision := e.downPID.Step(control.Input{
+		TargetLatencySeconds:  e.cfg.Control.TargetLatencyMS / 1000,
+		CurrentLatencySeconds: fastLatency,
+		CurrentRateBPS:        current.DownloadBPS,
+		FloorBPS:              e.cfg.Shaper.DownloadFloorMbps * 1_000_000,
+		CeilingBPS:            e.cfg.Shaper.DownloadCeilingMbps * 1_000_000,
+		DeltaSeconds:          float64(e.cfg.Control.LoopIntervalMS) / 1000,
+		ProbeHealthy:          sample.Healthy,
+	})
 
 	next := shaper.Rates{
-		UploadBPS:   decision.NextRateBPS,
-		DownloadBPS: current.DownloadBPS,
+		UploadBPS:   uploadDecision.NextRateBPS,
+		DownloadBPS: downloadDecision.NextRateBPS,
 	}
 	if err := e.shaper.Apply(ctx, next); err != nil {
 		return err
@@ -110,11 +128,11 @@ func (e *Engine) Tick(ctx context.Context) error {
 		FastLatencySeconds: fastLatency,
 		SlowLatencySeconds: slowLatency,
 		ProbeHealthy:       sample.Healthy,
-		FallbackActive:     decision.FallbackActive,
+		FallbackActive:     uploadDecision.FallbackActive || downloadDecision.FallbackActive,
 		PriorityActive:     e.cfg.Priority.Enabled,
-		ControlError:       decision.Error,
-		ControlIntegral:    decision.Integral,
-		ControlDerivative:  decision.Derivative,
+		ControlError:       uploadDecision.Error,
+		ControlIntegral:    uploadDecision.Integral,
+		ControlDerivative:  uploadDecision.Derivative,
 		TickTotal:          e.tickTotal,
 	}
 	e.mu.Unlock()
